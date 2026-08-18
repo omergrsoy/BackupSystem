@@ -66,6 +66,9 @@ namespace BackupSystem.Server.Migrations
                     b.Property<string>("DailyBackupTime")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ExcludedExtensions")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IpAddress")
                         .HasColumnType("nvarchar(max)");
 

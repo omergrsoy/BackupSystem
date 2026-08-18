@@ -63,6 +63,7 @@ namespace BackupSystem.Agent
                     bool forceBackup = false;
                     string? backupType = "Tam";
                     DateTime? referenceDate = null;
+                    string excludedExtensions = "";
 
                     if (root.TryGetProperty("forceBackup", out var forceProp)) forceBackup = forceProp.GetBoolean();
 
@@ -72,10 +73,16 @@ namespace BackupSystem.Agent
                     if (root.TryGetProperty("referenceDate", out var dateProp) && dateProp.ValueKind != System.Text.Json.JsonValueKind.Null)
                         referenceDate = dateProp.GetDateTime();
 
+                    if (root.TryGetProperty("excludedExtensions", out var extProp) && extProp.ValueKind != System.Text.Json.JsonValueKind.Null)
+                    {
+                        excludedExtensions = extProp.GetString();
+                    }
+
                     if (forceBackup)
                     {
                         _logger.LogWarning($"⚠️ SUNUCUDAN [{backupType}] YEDEKLEME EMRİ ALINDI!");
-                        await TakeBackupAndUploadAsync(serverUrl, machineId, backupType, referenceDate, stoppingToken);
+                        // Metoda excludedExtensions'ı da parametre olarak gönderiyoruz
+                        await TakeBackupAndUploadAsync(serverUrl, machineId, backupType, referenceDate, excludedExtensions, stoppingToken);
                     }
                 }
                 else
@@ -89,21 +96,33 @@ namespace BackupSystem.Agent
             }
         }
 
-        private async Task TakeBackupAndUploadAsync(string? serverUrl, int? machineId, string? backupType, DateTime? referenceDate, CancellationToken stoppingToken)
+        private async Task TakeBackupAndUploadAsync(string serverUrl, int machineId, string backupType, DateTime? referenceDate, string excludedExtensions, CancellationToken stoppingToken)
         {
             var targetDir = _configuration["AgentSettings:TargetDirectory"];
             if (!Directory.Exists(targetDir)) return;
 
+            // Hariç tutulacak uzantıları temiz bir listeye çevir (Örn: ".tmp", ".log")
+            var extList = string.IsNullOrEmpty(excludedExtensions)
+                ? new List<string>()
+                : excludedExtensions.Split(',').Select(e => e.Trim().ToLower()).ToList();
+
             var allFiles = Directory.GetFiles(targetDir, "*.*", SearchOption.AllDirectories);
 
-            // Eğer referans tarihi varsa (Artımlı veya Fark) filtrele, yoksa (Tam) hepsini al
-            var filesToBackup = allFiles.Where(f => referenceDate == null || File.GetLastWriteTime(f) > referenceDate).ToList();
+            // MİMARİ DOKUNUŞ: Hem Tarihe Göre Hem Uzantıya Göre Çift Filtreleme
+            var filesToBackup = allFiles.Where(f =>
+            {
+                bool isDateValid = referenceDate == null || File.GetLastWriteTime(f) > referenceDate;
+                bool isExcluded = extList.Contains(Path.GetExtension(f).ToLower());
+
+                return isDateValid && !isExcluded; // Tarihi uygunsa VE yasaklı uzantı DEĞİLSE yedeğe al
+            }).ToList();
 
             if (!filesToBackup.Any())
             {
-                _logger.LogInformation($"ℹ️ [{backupType}] Yedeklemesi: Değişen veya yeni eklenen dosya yok. Atlandı.");
+                _logger.LogInformation($"ℹ️ [{backupType}] Yedeklemesi: Dosya bulunamadı veya tüm dosyalar filtrelendi.");
                 return;
             }
+            // ... (Geri kalan Zipleme, Şifreleme ve UploadChunk kodları tamamen aynı kalacak)
 
             // ... Eski kodlar (Zip oluşturma kısmı)
             var tempZipPath = Path.Combine(Path.GetTempPath(), $"backup_{machineId}_{DateTime.Now:yyyyMMddHHmmss}.zip");

@@ -72,13 +72,13 @@ namespace BackupSystem.Server.Controllers
             }
 
             _context.SaveChanges();
-
             return Ok(new
             {
                 message = "Heartbeat alındı.",
                 forceBackup = shouldBackup,
                 backupType = backupType ?? "Artımlı",
-                referenceDate = referenceDate
+                referenceDate = referenceDate,
+                excludedExtensions = machine.ExcludedExtensions
             });
         }
 
