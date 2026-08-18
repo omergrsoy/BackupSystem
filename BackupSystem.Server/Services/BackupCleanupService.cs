@@ -53,6 +53,12 @@ namespace BackupSystem.Server.Services
                         // Yeni e-posta servisini çağırıyoruz (Konu ve Mesaj olarak)
                         await notifier.SendEmailNotificationAsync($"⚠️ Sistem Uyarısı: {machine.Name} Çevrimdışı!", alertMessage);
                     }
+                    foreach (var backup in oldBackups)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "backups", backup.FileName);
+                        if (File.Exists(filePath)) File.Delete(filePath);
+                        context.Backups.Remove(backup);
+                    }
 
                     if (oldBackups.Any())
                     {
@@ -62,8 +68,8 @@ namespace BackupSystem.Server.Services
                 }
 
                 // Servisi her 24 saatte bir çalışacak şekilde uyutuyoruz
-                await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
-            }
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            }   
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BackupSystem.Server.Data;
 using BackupSystem.Server.Models;
+using BackupSystem.Server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -164,10 +165,25 @@ namespace BackupSystem.Server.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok(new { message = "Tüm parçalar başarıyla birleştirildi ve yedek tamamlandı!" });
+
+                // --- E-POSTA BİLDİRİMİ TETİKLEME ---
+                var notifier = HttpContext.RequestServices.GetRequiredService<NotificationService>();
+
+                string successMessage = $"<h3>✅ Yedekleme Başarıyla Tamamlandı!</h3>" +
+                                        $"<b>Makine:</b> {machine.Name}<br>" +
+                                        $"<b>Yedek Tipi:</b> {backupType}<br>" +
+                                        $"<b>Dosya Boyutu:</b> {backupRecord.FileSize} MB<br>" +
+                                        $"<b>Tarih:</b> {DateTime.Now:dd.MM.yyyy HH:mm:ss}";
+
+                await notifier.SendEmailNotificationAsync($"✅ Başarılı Yedek: {machine.Name}", successMessage);
+
+                return Ok(new { message = "Tüm parçalar birleştirildi ve yedek tamamlandı!" });
             }
 
             // Henüz bitmediyse Agent'a devam etmesini söyle
             return Ok(new { message = $"Parça {chunkIndex + 1}/{totalChunks} başarıyla alındı." });
         }
+
+
     }
 }

@@ -11,9 +11,8 @@ namespace BackupSystem.Server.Services
         private const string SmtpHost = "smtp.gmail.com";
         private const int SmtpPort = 587;
         private const string SenderEmail = "omergrsoy52@gmail.com";
-        private const string SenderPassword = "dfny djhp dmtq pjfn";
-        private const string ReceiverEmail = "omergrsy0652@hotmail.com"; // Kendi e-postanızı yazın
-
+        private const string SenderPassword = "tmscqsqnvntwoigo";
+        private const string ReceiverEmail = "omergursoyy0@gmail.com";
         public async Task SendEmailNotificationAsync(string subject, string htmlMessage)
         {
             try

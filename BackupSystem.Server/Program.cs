@@ -1,6 +1,7 @@
 using BackupSystem.Server.Data;
 using BackupSystem.Server.Services;
-using Microsoft.EntityFrameworkCore;    
+using Microsoft.EntityFrameworkCore;
+using BackupSystem.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
 builder.Services.AddHostedService<BackupCleanupService>();
+builder.Services.AddSingleton<NotificationService>();
 
 var app = builder.Build();
 
