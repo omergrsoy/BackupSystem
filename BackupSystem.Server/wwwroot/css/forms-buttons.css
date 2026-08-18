@@ -1,0 +1,95 @@
+﻿/* Buton Tasarımları */
+.btn-custom {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.btn-primary-custom {
+    background-color: #0d6efd;
+}
+
+    .btn-primary-custom:hover {
+        background-color: #0b5ed7;
+    }
+
+.btn-success-custom {
+    background-color: #198754;
+}
+
+    .btn-success-custom:hover {
+        background-color: #157347;
+    }
+
+.btn-secondary-custom {
+    background-color: #6c757d;
+}
+
+    .btn-secondary-custom:hover {
+        background-color: #5c636a;
+    }
+
+.btn-sm-custom {
+    padding: 4px 8px;
+    font-size: 0.875rem;
+    margin-right: 4px;
+}
+
+.btn-warning-custom {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-danger-custom {
+    background-color: #dc3545;
+}
+
+/* Form Tasarımı */
+.machine-form-wrapper {
+    max-width: 600px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #212529;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-check-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-check-input {
+    margin-right: 8px;
+    width: 18px;
+    height: 18px;
+}

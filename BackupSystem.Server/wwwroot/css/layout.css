@@ -1,0 +1,82 @@
+﻿/* Genel Konteyner ve Başlıklar */
+.machine-container {
+    max-width: 1200px;
+    margin: 0; /* 2rem auto */
+    padding: 0; /* 0 15px */
+    font-family: Arial, sans-serif;
+}
+
+.machine-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+    .machine-header h2 {
+        margin: 0;
+        color: #333;
+    }
+/* --- LAYAOUT (APP WRAPPER) TASARIMI --- */
+.app-wrapper {
+    display: flex;
+    min-height: 100vh; /* Ekranın tamamını kapla */
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9; /* Tüm sayfa için hafif gri arka plan */
+}
+
+/* --- SIDEBAR (YAN MENÜ) TASARIMI --- */
+.sidebar {
+    width: 250px; /* Sidebar'ın sabit genişliği */
+    background-color: #212529; /* Koyu tema (Tablo başlığıyla uyumlu) */
+    color: #fff;
+    padding-top: 20px;
+    flex-shrink: 0; /* Küçülmesini engelle */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebar-brand {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 0 15px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .sidebar-menu li {
+        margin-bottom: 5px;
+    }
+
+    .sidebar-menu a {
+        color: #adb5bd; /* Hafif gri metin */
+        text-decoration: none;
+        padding: 12px 20px;
+        display: block;
+        transition: all 0.3s ease;
+        font-size: 1.05rem;
+    }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            color: #fff;
+            background-color: #0d6efd; /* Vurgu rengi (Mavi) */
+            border-left: 4px solid #fff; /* Seçili olduğunda solunda beyaz çizgi çıksın */
+            padding-left: 16px; /* Çizgiden dolayı kaymayı engellemek için */
+        }
+
+/* --- ANA İÇERİK ALANI --- */
+.main-content {
+    flex-grow: 1; /* Kalan tüm boşluğu kapla */
+    padding: 30px;
+    overflow-y: auto; /* İçerik uzunsa sadece bu kısım kaysın */
+}
