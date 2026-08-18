@@ -1,0 +1,59 @@
+﻿@model BackupSystem.Server.Models.Machine
+
+@{
+    ViewData["Title"] = "Makine Düzenle";
+}
+
+<div class="machine-container">
+    <h2>Makineyi Düzenle</h2>
+    <hr />
+
+    <div class="machine-form-wrapper">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="LastHeartbeat" />
+
+            <div asp-validation-summary="All" style="color: red; margin-bottom: 15px; font-weight: bold;"></div>
+
+            <div class="form-group">
+                <label class="form-label">Makine Adı</label>
+                <input asp-for="Name" class="form-input" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">IP Adresi</label>
+                <input asp-for="IpAddress" class="form-input" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">İşletim Sistemi</label>
+                <select asp-for="OSType" class="form-input">
+                    <option value="Windows">Windows</option>
+                    <option value="Linux">Linux</option>
+                    <option value="Ubuntu">Ubuntu</option>
+                    <option value="Kali Linux">Kali Linux</option>
+                    <option value="Pardus">Pardus</option>
+                    <option value="MacOS">MacOS</option>
+                    <option value="iOS">iOS</option>
+                    <option value="Android">Android</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Yedeklenecek Hedef Dizin</label>
+                <input asp-for="TargetDirectory" class="form-input" required />
+            </div>
+
+            <div class="form-check-group">
+                <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+                <label class="form-label" style="margin-bottom: 0;">Makine Aktif Mi?</label>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+                <button type="submit" class="btn-custom btn-primary-custom">Güncelle</button>
+                <a asp-action="Index" class="btn-custom btn-secondary-custom">Listeye Dön</a>
+            </div>
+
+        </form>
+    </div>
+</div>

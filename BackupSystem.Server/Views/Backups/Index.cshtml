@@ -1,0 +1,60 @@
+﻿@model IEnumerable<BackupSystem.Server.Models.BackupRecord>
+
+@{
+    ViewData["Title"] = "Geçmiş Yedekler";
+}
+
+<div class="machine-container">
+    <div class="machine-header">
+        <h2>Geçmiş Yedekler</h2>
+    </div>
+
+    <table class="machine-table">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Makine Adı</th>
+                <th>Dosya Adı</th>
+                <th>Boyut (MB)</th>
+                <th>Durum</th>
+                <th>Tip</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" style="text-align:center;">Henüz hiç yedek kaydı bulunmamaktadır.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.BackupDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                        <td>@(item.Machine != null ? item.Machine.Name : "Silinmiş Makine")</td>
+                        <td>@item.FileName</td>
+                        <td>@item.FileSize MB</td>
+                        <td>
+                            @if (item.Status == "Başarılı")
+                            {
+                                <span class="badge-custom badge-active">Başarılı</span>
+                            }
+                            else
+                            {
+                                <span class="badge-custom badge-passive">@item.Status</span>
+                            }
+                        </td>
+                        <td>@item.BackupType</td>
+
+                        <td>
+                            <a asp-controller="Backups" asp-action="Download" asp-route-id="@item.Id" class="btn-custom btn-sm-custom btn-primary-custom">⬇️ İndir</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

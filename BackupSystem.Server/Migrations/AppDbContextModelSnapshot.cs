@@ -33,8 +33,10 @@ namespace BackupSystem.Server.Migrations
                     b.Property<DateTime>("BackupDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("BackupType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FileName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("FileSize")
@@ -44,7 +46,6 @@ namespace BackupSystem.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -63,25 +64,27 @@ namespace BackupSystem.Server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("IpAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastHeartBeat")
+                    b.Property<bool>("IsBackupRequested")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastHeartbeat")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OSType")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestedBackupType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TargetDirectory")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

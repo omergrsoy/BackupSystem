@@ -1,25 +1,31 @@
-using BackupSystem.Server.Models;
+using BackupSystem.Server.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using System;
+using System.Linq;
 
 namespace BackupSystem.Server.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppDbContext _context;
+
+        public HomeController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
-            return View();
-        }
+            // İstatistikleri hesaplıyoruz
+            ViewBag.TotalMachines = _context.Machines.Count();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            // 5 dakikadan yakın zamanda heartbeat atanlar çevrimiçi (aktif) sayılır
+            var fiveMinsAgo = DateTime.Now.AddMinutes(-5);
+            ViewBag.OnlineMachines = _context.Machines.Count(m => m.IsActive && m.LastHeartbeat >= fiveMinsAgo);
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.TotalBackups = _context.Backups.Count();
+
+            return View();
         }
     }
 }

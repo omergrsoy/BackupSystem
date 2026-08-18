@@ -1,8 +1,28 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Ana Sayfa - Özet";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="machine-container">
+    <div class="machine-header">
+        <h2>📊 Sistem Özeti (Dashboard)</h2>
+    </div>
+
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+
+        <div style="flex: 1; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #0d6efd;">
+            <h3 style="margin-top:0; color: #6c757d; font-size: 1.2rem;">Toplam Makine</h3>
+            <p style="font-size: 2.5rem; font-weight: bold; margin: 0; color: #212529;">@ViewBag.TotalMachines</p>
+        </div>
+
+        <div style="flex: 1; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #198754;">
+            <h3 style="margin-top:0; color: #6c757d; font-size: 1.2rem;">Çevrimiçi Makineler</h3>
+            <p style="font-size: 2.5rem; font-weight: bold; margin: 0; color: #212529;">@ViewBag.OnlineMachines</p>
+        </div>
+
+        <div style="flex: 1; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #6f42c1;">
+            <h3 style="margin-top:0; color: #6c757d; font-size: 1.2rem;">Toplam Yedek Sayısı</h3>
+            <p style="font-size: 2.5rem; font-weight: bold; margin: 0; color: #212529;">@ViewBag.TotalBackups</p>
+        </div>
+
+    </div>
 </div>

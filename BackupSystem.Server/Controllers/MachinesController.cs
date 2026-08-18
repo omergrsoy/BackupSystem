@@ -40,5 +40,63 @@ namespace BackupSystem.Server.Controllers
             }
             return View(machine);
         }
+
+        // 4. DÜZENLEME EKRANINI GETİRME
+        public IActionResult Edit(int id)
+        {
+            var machine = _context.Machines.Find(id);
+            if (machine == null)
+            {
+                return NotFound();
+            }
+            return View(machine);
+        }
+
+        // 5. DÜZENLEME İŞLEMİNİ KAYDETME
+        [HttpPost]
+        public IActionResult Edit(int id, Machine machine)
+        {
+            if (id != machine.Id)
+            {
+                return NotFound();
+            }
+
+            ModelState.Remove("Backups"); // Yine Backups listesini doğrulamadan çıkarıyoruz
+
+            if (ModelState.IsValid)
+            {
+                _context.Machines.Update(machine);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(machine);
+        }
+
+        // 6. SİLME İŞLEMİ (Doğrudan veritabanından siler ve listeye döner)
+        public IActionResult Delete(int id)
+        {
+            var machine = _context.Machines.Find(id);
+            if (machine != null)
+            {
+                _context.Machines.Remove(machine);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // 7. MANUEL YEDEKLEME TETİKLEYİCİ
+        public IActionResult RequestBackup(int id, string type)
+        {
+            var machine = _context.Machines.Find(id);
+            if (machine != null)
+            {
+                machine.IsBackupRequested = true;
+                machine.RequestedBackupType = type; // Seçilen tipi (Tam, Artımlı, Fark) kaydediyoruz
+                _context.SaveChanges();
+                TempData["Message"] = $"{machine.Name} makinesi için '{type}' yedekleme emri kuyruğa alındı.";
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
+    
 }
