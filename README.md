@@ -32,7 +32,7 @@ MVC Sunucu projesinin (`BackupSystem.Server`) veritabanını oluşturmak için *
 ```powershell
 Update-Database
 
-### 2. Agent Ayarlarını Yapılandırma
+## 2. Agent Ayarlarını Yapılandırma
 BackupSystem.Agent projesi içindeki appsettings.json dosyasını açıp kendi ortamınıza göre güncelleyin:
 JSON
 "AgentSettings": {
@@ -40,13 +40,13 @@ JSON
     "MachineId": 1, // Eklediğiniz makinenin ID'si
     "TargetDirectory": "C:\\Yedekler" // Yedeklenecek test klasörünüz
 }
-### 3. Çoklu Başlangıç (Multiple Startup) Ayarı
+## 3. Çoklu Başlangıç (Multiple Startup) Ayarı
 Sistemin doğru çalışması için her iki projenin de aynı anda başlaması gerekir:
 Solution'a (BackupSystem) sağ tıklayıp Properties (Özellikler) menüsüne girin.
 Startup Project (Başlangıç Projesi) sekmesinden Multiple startup projects seçeneğini işaretleyin.
 Hem Server hem de Agent projeleri için "Action" kısmını Start (Başlat) olarak ayarlayın ve kaydedin.
 
-### 4. Başlat
+## 4. Başlat
 F5 tuşuna basarak projeyi başlatın. Arayüzden makineleri görüntüleyebilir, yeni yedekleme istekleri (Tam, Artımlı, Fark) gönderebilir ve şifrelenmiş yedeklerinizi bilgisayarınıza çözülmüş olarak indirebilirsiniz.
 
 Geliştirici: [Senin Adın/Soyadın]
