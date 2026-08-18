@@ -30,25 +30,41 @@ namespace BackupSystem.Server.Controllers
             machine.LastHeartbeat = DateTime.Now;
 
             bool shouldBackup = machine.IsBackupRequested;
-            string? backupType = machine.RequestedBackupType;
+            string backupType = machine.RequestedBackupType;
             DateTime? referenceDate = null;
 
-            if (shouldBackup)
+            // --- ZAMANLANMIŞ GÖREV KONTROLÜ (AUTOMATIC SCHEDULER) ---
+            if (!shouldBackup && !string.IsNullOrEmpty(machine.DailyBackupTime))
             {
-                // MİMARİ KARAR MERKEZİ: Hangi tarihten sonrasını isteyeceğiz?
+                var currentTimeStr = DateTime.Now.ToString("HH:mm");
+
+                // Eğer saat geldiyse VE bugün bu otomatik yedek henüz çalışmadıysa
+                if (currentTimeStr == machine.DailyBackupTime &&
+                   (machine.LastScheduledBackupDate == null || machine.LastScheduledBackupDate.Value.Date < DateTime.Now.Date))
+                {
+                    shouldBackup = true;
+                    backupType = "Artımlı"; // Zamanlanmış yedekler varsayılan olarak 'Artımlı' çalışır
+                    machine.LastScheduledBackupDate = DateTime.Now; // Bugün çalıştı olarak işaretle
+
+                    // Differential/Incremental referans tarihi hesaplama
+                    var last = _context.Backups.Where(b => b.MachineId == machineId && b.Status == "Başarılı").OrderByDescending(b => b.BackupDate).FirstOrDefault();
+                    referenceDate = last?.BackupDate;
+                }
+            }
+
+            // Manuel buton isteği varsa referans tarihini eski mantığımızla çözüyoruz
+            if (machine.IsBackupRequested)
+            {
                 if (backupType == "Artımlı")
                 {
-                    // Artımlı: En son BAŞARILI yedeğin tarihi (Tipi ne olursa olsun)
                     var last = _context.Backups.Where(b => b.MachineId == machineId && b.Status == "Başarılı").OrderByDescending(b => b.BackupDate).FirstOrDefault();
                     referenceDate = last?.BackupDate;
                 }
                 else if (backupType == "Fark")
                 {
-                    // Fark (Differential): Sadece en son TAM yedeğin tarihi
                     var lastFull = _context.Backups.Where(b => b.MachineId == machineId && b.Status == "Başarılı" && b.BackupType == "Tam").OrderByDescending(b => b.BackupDate).FirstOrDefault();
                     referenceDate = lastFull?.BackupDate;
                 }
-                // 'Tam' seçildiyse referenceDate null kalır, Agent her şeyi zipler.
 
                 machine.IsBackupRequested = false;
                 machine.RequestedBackupType = null;
@@ -60,7 +76,7 @@ namespace BackupSystem.Server.Controllers
             {
                 message = "Heartbeat alındı.",
                 forceBackup = shouldBackup,
-                backupType = backupType,
+                backupType = backupType ?? "Artımlı",
                 referenceDate = referenceDate
             });
         }

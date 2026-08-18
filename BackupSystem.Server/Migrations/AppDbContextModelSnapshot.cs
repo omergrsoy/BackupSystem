@@ -63,6 +63,9 @@ namespace BackupSystem.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("DailyBackupTime")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IpAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -73,6 +76,9 @@ namespace BackupSystem.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastHeartbeat")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastScheduledBackupDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")

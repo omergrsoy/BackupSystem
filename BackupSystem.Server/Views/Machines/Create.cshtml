@@ -42,6 +42,12 @@
                 <input asp-for="TargetDirectory" class="form-input" placeholder="Örn: C:\Yedekler veya /var/www/" required />
             </div>
 
+            <div class="form-group">
+                <label class="form-label">Zamanlanmış Günlük Yedek Saati (İsteğe Bağlı)</label>
+                <input asp-for="DailyBackupTime" type="time" class="form-input" />
+                <small style="color: #6c757d;">Her gün bu saatte otomatik yedekleme başlatılır.</small>
+            </div>
+
             <div class="form-check-group">
                 <input asp-for="IsActive" type="checkbox" class="form-check-input" checked />
                 <label class="form-label" style="margin-bottom: 0;">Makine Aktif Mi?</label>

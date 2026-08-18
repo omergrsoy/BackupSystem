@@ -14,6 +14,8 @@ namespace BackupSystem.Server.Models
         public bool IsActive { get; set; }
         public bool IsBackupRequested { get; set; } = false;
         public string? RequestedBackupType { get; set; }
+        public string? DailyBackupTime { get; set; }
+        public DateTime? LastScheduledBackupDate { get; set; }
         public ICollection<BackupRecord>? Backups { get; set; }
 
     }

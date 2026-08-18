@@ -32,20 +32,26 @@ namespace BackupSystem.Server.Services
                 {
                     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                     var limitDate = DateTime.Now.AddDays(-7); // 7 günden eski yedekler
+                    var notifier = scope.ServiceProvider.GetRequiredService<NotificationService>();
 
                     var oldBackups = context.Backups.Where(b => b.BackupDate < limitDate).ToList();
 
-                    foreach (var backup in oldBackups)
-                    {
-                        // 1. Fiziksel .zip dosyasını wwwroot'tan sil
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "backups", backup.FileName);
-                        if (File.Exists(filePath))
-                        {
-                            File.Delete(filePath);
-                        }
+                    var offlineLimit = DateTime.Now.AddMinutes(-5);
+                    var offlineMachines = context.Machines
+                        .Where(m => m.IsActive && m.LastHeartbeat < offlineLimit)
+                        .ToList();
 
-                        // 2. Veritabanından sil
-                        context.Backups.Remove(backup);
+                    foreach (var machine in offlineMachines)
+                    {
+                        // HTML formatında (<br> ile alt satıra geçerek) e-posta içeriği hazırlıyoruz
+                        string alertMessage = $"<h3>⚠️ ALARM: Çevrimdışı Makine!</h3>" +
+                                              $"<b>Makine Adı:</b> {machine.Name}<br>" +
+                                              $"<b>IP Adresi:</b> {machine.IpAddress}<br>" +
+                                              $"<b>Son Erişim:</b> {machine.LastHeartbeat:dd.MM.yyyy HH:mm:ss}<br><br>" +
+                                              $"Lütfen acilen makinenin ağ bağlantısını ve Agent servisini kontrol edin.";
+
+                        // Yeni e-posta servisini çağırıyoruz (Konu ve Mesaj olarak)
+                        await notifier.SendEmailNotificationAsync($"⚠️ Sistem Uyarısı: {machine.Name} Çevrimdışı!", alertMessage);
                     }
 
                     if (oldBackups.Any())
