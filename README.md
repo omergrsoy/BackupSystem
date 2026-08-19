@@ -49,6 +49,4 @@ Hem Server hem de Agent projeleri için "Action" kısmını Start (Başlat) olar
 ## 4. Başlat
 F5 tuşuna basarak projeyi başlatın. Arayüzden makineleri görüntüleyebilir, yeni yedekleme istekleri (Tam, Artımlı, Fark) gönderebilir ve şifrelenmiş yedeklerinizi bilgisayarınıza çözülmüş olarak indirebilirsiniz.
 
-Geliştirici: [Senin Adın/Soyadın]
-
-Proje Kapsamı: Staj Programı
+Geliştirici: ÖMER GÜRSOY
