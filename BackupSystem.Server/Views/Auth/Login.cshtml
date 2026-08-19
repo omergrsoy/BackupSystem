@@ -1,0 +1,58 @@
+﻿@model BackupSystem.Server.ViewModels.LoginViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html lang="tr" data-theme="dark">
+
+<head>
+
+    <title>Sisteme Giriş - Yedekleme</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <link rel="stylesheet" href="~/css/forms-buttons.css" />
+
+    <style>
+            body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--bg-color); }
+            .login-box { background: var(--card-bg); padding: 40px; border-radius: 8px; border: 1px solid var(--border-color); 
+                         box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 400px; text-align: center; }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="login-box">
+        <h2 style="color: var(--text-color); margin-bottom: 20px;">🛡️ Sistem Girişi</h2>
+
+        <form 
+            asp-action="Login" method="post"
+        >
+            <div asp-validation-summary="All" style="color: #dc3545; font-weight: bold; margin-bottom: 15px;"></div>
+
+            <div class="form-group" style="text-align: left;">
+                <label class="form-label">E-Posta Adresi</label>
+                <input 
+                    asp-for="Email" class="form-input" placeholder="admin@yedekleme.com" required 
+                />
+            </div>
+
+            <div class="form-group" style="text-align: left;">
+                <label class="form-label">Şifre</label>
+                <input asp-for="Password" type="password" class="form-input" placeholder="******" required />
+            </div>
+
+            <button 
+                type="submit" class="btn-custom btn-primary-custom" style="width: 100%; margin-top: 10px;">
+                Giriş Yap
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

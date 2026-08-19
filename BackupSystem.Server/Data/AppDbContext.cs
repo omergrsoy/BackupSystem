@@ -14,6 +14,7 @@ namespace BackupSystem.Server.Data
 
         public DbSet<Machine> Machines { get; set; }
         public DbSet<BackupRecord> Backups { get; set; }
+        public DbSet<SystemLog> SystemLogs { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

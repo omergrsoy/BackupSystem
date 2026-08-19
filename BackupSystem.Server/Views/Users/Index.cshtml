@@ -1,0 +1,55 @@
+﻿@model IEnumerable<BackupSystem.Server.ViewModels.UserListViewModel>
+@{
+    ViewData["Title"] = "Kullanıcılar";
+}
+
+<div class="machine-container">
+    <div class="machine-header">
+        <h2>Kullanıcı Yönetimi</h2>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success" style="color:#0f5132; margin-bottom:15px;">@TempData["Message"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger" style="color:#842029; margin-bottom:15px;">@TempData["Error"]</div>
+        }
+
+        <a asp-action="Create" class="btn-custom btn-primary-custom">Yeni Kullanıcı Ekle</a>
+    </div>
+
+    <table class="machine-table">
+        <thead>
+            <tr>
+                <th>E-Posta Adresi</th>
+                <th>Rol / Yetki</th>
+                <th style="width: 150px;">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>
+                        @if (user.Roles.Contains("Admin"))
+                        {
+                            <span class="badge-custom badge-warning">Yönetici (Admin)</span>
+                        }
+                        else
+                        {
+
+                            <span class="badge-custom badge-active">Kullanıcı</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@user.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn-custom btn-sm-custom btn-danger-custom" onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?');">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

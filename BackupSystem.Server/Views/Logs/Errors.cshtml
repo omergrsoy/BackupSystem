@@ -1,0 +1,43 @@
+﻿@model IEnumerable<BackupSystem.Server.Models.SystemLog>
+@{
+    ViewData["Title"] = "Hata Merkezi";
+}
+
+<div class="machine-container">
+    <div class="machine-header">
+        <h2>Hata Merkezi</h2>
+        <a asp-action="CreateTestError" class="btn-custom btn-danger-custom">Sisteme Test Hatası Fırlat</a>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" style="color:#0f5132; margin-bottom:15px;">@TempData["Message"]</div>
+    }
+
+    <table class="machine-table">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Makine</th>
+                <th>Hata Mesajı</th>
+                <th>Teknik Detay</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr><td colspan="4" style="text-align:center;">Sistemde hiç hata bulunmuyor. Harika!</td></tr>
+            }
+
+            @foreach (var error in Model)
+            {
+                <tr style="background-color: rgba(220, 53, 69, 0.05);">
+                    <td style="color: #dc3545; font-weight: bold;">@error.LogDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@error.MachineName</td>
+                    <td>@error.Message</td>
+                    <td style="font-family: monospace; font-size: 0.8rem;">@error.Details</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

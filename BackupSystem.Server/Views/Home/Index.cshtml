@@ -4,7 +4,7 @@
 
 <div class="machine-container">
     <div class="machine-header">
-        <h2>📊 Sistem Özeti (Dashboard)</h2>
+        <h2>Sistem Özeti</h2>
     </div>
 
     <div class="dashboard-container">
@@ -25,4 +25,41 @@
         </div>
 
     </div>
+
+    <div style="margin-top: 30px; background: var(--card-bg); padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border-color);">
+        <h3 style="margin-top:0; color: var(--text-color); font-size: 1.2rem;">📈 Son 7 Günlük Hata Raporu</h3>
+        <canvas id="errorChart" height="80"></canvas>
+    </div>
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var ctx = document.getElementById('errorChart').getContext('2d');
+                var errorChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [@Html.Raw(ViewBag.ChartLabels)],
+                        datasets: [{
+                            label: 'Oluşan Hata Sayısı',
+                            data: [@ViewBag.ChartData],
+                            backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                            borderColor: 'rgba(220, 53, 69, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: 'rgba(220, 53, 69, 1)',
+                            pointRadius: 4,
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                        }
+                    }
+                });
+            });
+    </script>
+
 </div>

@@ -362,3 +362,42 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /BackupSystem.Server/Migrations/20260814081649_InitialCreate.cs
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114249_backup_1_20260817114245.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114322_backup_1_20260817114319.zip
+/BackupSystem.Server/wwwroot/backups/backup_1_Tam_202608181155.enc
+/BackupSystem.Server/wwwroot/backups/backup_1_Tam_202608181433.enc
+/BackupSystem.Server/wwwroot/backups/backup_1_Tam_202608181916.enc
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114353_backup_1_20260817114352.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114427_backup_1_20260817114424.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114500_backup_1_20260817114457.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114533_backup_1_20260817114530.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114606_backup_1_20260817114603.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114639_backup_1_20260817114637.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114712_backup_1_20260817114709.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114745_backup_1_20260817114742.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114819_backup_1_20260817114815.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114852_backup_1_20260817114849.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114925_backup_1_20260817114922.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_114958_backup_1_20260817114955.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_115031_backup_1_20260817115028.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_115105_backup_1_20260817115102.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_115138_backup_1_20260817115135.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_115209_backup_1_20260817115208.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_132303_backup_1_20260817132302.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260817_134432_backup_1_20260817134430.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_20260818_105239_backup_1_202608181052.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_Artımlı_20260818_112109_backup_1_20260818112109.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_Fark_20260818_112134_backup_1_20260818112134.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_Tam_20260818_112024_backup_1_20260818112023.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_Tam_20260818_114442_backup_1_20260818114440.zip
+/BackupSystem.Server/wwwroot/backups/Xiaomi 13 Lite_Tam_20260818_114442_backup_1_20260818114440.zip.enc
+/BackupSystem.Server/Migrations/20260814081649_InitialCreate.cs
+/BackupSystem.Server/Migrations/20260817100702_AddBackupRequestedFlag.cs
+/BackupSystem.Server/Migrations/20260817125505_AddBackupRequestedFlag2.cs
+/BackupSystem.Server/Migrations/20260818080209_AddBackupTypes.cs
+/BackupSystem.Server/Migrations/20260818103549_AddSchedulingFields.cs
+/BackupSystem.Server/Migrations/AppDbContextModelSnapshot.cs
+/BackupSystem.Server/Migrations/20260819082148_AddSystemLogsTable.cs
+/BackupSystem.Server/Migrations/20260819064621_AddIdentitySecurity.cs
+/BackupSystem.Server/Migrations/20260818182224_AddExcludedFolders.cs
+/BackupSystem.Server/Migrations/20260818171150_AddExcludedExtensions.cs

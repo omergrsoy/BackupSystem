@@ -1,0 +1,39 @@
+﻿@model BackupSystem.Server.ViewModels.CreateUserViewModel
+@{
+    ViewData["Title"] = "Kullanıcı Ekle";
+}
+
+<div class="machine-container">
+    <h2>Yeni Kullanıcı Oluştur</h2>
+    <hr />
+
+    <div class="machine-form-wrapper">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="All" style="color: #dc3545; margin-bottom: 15px; font-weight: bold;"></div>
+
+            <div class="form-group">
+                <label class="form-label">E-Posta Adresi</label>
+                <input asp-for="Email" type="email" class="form-input" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Geçici Şifre</label>
+                <input asp-for="Password" type="password" class="form-input" required />
+                <small style="color: #6c757d;">En az 6 karakter olmalı ve rakam içermelidir.</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Sistem Yetkisi (Rol)</label>
+                <select asp-for="Role" class="form-input">
+                    <option value="Kullanici">Sadece İzleyici (Kullanıcı)</option>
+                    <option value="Admin">Tam Yetkili (Admin)</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <button type="submit" class="btn-custom btn-success-custom">Kaydet</button>
+                <a asp-action="Index" class="btn-custom btn-secondary-custom">Listeye Dön</a>
+            </div>
+        </form>
+    </div>
+</div>

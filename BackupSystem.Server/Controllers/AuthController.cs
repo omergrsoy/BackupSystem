@@ -60,7 +60,7 @@ namespace BackupSystem.Server.Controllers
             using QRCodeGenerator qrGenerator = new QRCodeGenerator();
             using QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrUri, QRCodeGenerator.ECCLevel.Q);
             using PngByteQRCode qrCode = new PngByteQRCode(qrCodeData);
-            byte[] qrCodeImage = qrCode.GetGraphic(20);
+            byte[] qrCodeImage = qrCode.GetGraphic(10);
 
             var model = new Setup2FAViewModel
             {

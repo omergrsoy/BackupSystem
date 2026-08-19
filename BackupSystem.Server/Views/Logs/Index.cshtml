@@ -1,0 +1,50 @@
+﻿@model IEnumerable<BackupSystem.Server.Models.SystemLog>
+@{
+    ViewData["Title"] = "Log Kayıtları";
+}
+
+<div class="machine-container">
+    <div class="machine-header">
+        <h2>Sistem Log Kayıtları</h2>
+        <small style="color: #6c757d;">(Sadece Yönetici Yetkisine Sahip Kullanıcılar Görebilir)</small>
+    </div>
+
+    <table class="machine-table">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Seviye</th>
+                <th>Makine</th>
+                <th>Mesaj</th>
+                <th>Detay</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model)
+            {
+                <tr>
+                    <td>@log.LogDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                    <td>
+                        @if (log.LogLevel == "Error")
+                        {
+                            <span class="badge-custom badge-passive">HATA</span>
+                        }
+                        else if (log.LogLevel == "Warning")
+                        {
+
+                            <span class="badge-custom badge-warning">UYARI</span>
+                        }
+                        else
+                        {
+
+                            <span class="badge-custom badge-active">BİLGİ</span>
+                        }
+                    </td>
+                    <td>@log.MachineName</td>
+                    <td>@log.Message</td>
+                    <td style="font-family: monospace; font-size: 0.8rem; color: #dc3545;">@log.Details</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
