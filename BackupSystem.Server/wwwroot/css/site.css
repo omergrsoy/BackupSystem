@@ -1,3 +1,60 @@
+/* GÜNDÜZ (LIGHT) TEMA DEĞİŞKENLERİ */
+:root {
+    --bg-color: #f4f6f9;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --sidebar-bg: #212529;
+    --sidebar-text: #ffffff;
+    --border-color: #dee2e6;
+    --table-header-bg: #e9ecef;
+}
+
+/* KARANLIK (DARK) TEMA DEĞİŞKENLERİ */
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --sidebar-bg: #000000;
+    --sidebar-text: #e0e0e0;
+    --border-color: #333333;
+    --table-header-bg: #2c2c2c;
+}
+
+/* DEĞİŞKENLERİ SAYFAYA UYGULAYALIM */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card, .machine-container, .dashboard-card {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+table {
+    color: var(--text-color) !important;
+}
+
+thead th {
+    background-color: var(--table-header-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+td {
+    border-color: var(--border-color) !important;
+}
+
+.sidebar {
+    background-color: var(--sidebar-bg) !important;
+}
+
+    .sidebar a {
+        color: var(--sidebar-text) !important;
+    }
+
 html {
   font-size: 14px;
 }
@@ -15,10 +72,6 @@ html {
 html {
   position: relative;
   min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

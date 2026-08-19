@@ -57,10 +57,10 @@
 /* Form Tasarımı */
 .machine-form-wrapper {
     max-width: 600px;
-    background-color: #f8f9fa;
+    background-color: var(--card-bg); /* DÜZELTİLDİ */
     padding: 20px;
     border-radius: 8px;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--border-color); /* DÜZELTİLDİ */
 }
 
 .form-group {
@@ -71,15 +71,17 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
-    color: #212529;
+    color: var(--text-color); /* DÜZELTİLDİ */
 }
 
 .form-input {
     width: 100%;
     padding: 8px 12px;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--border-color); /* DÜZELTİLDİ */
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: var(--bg-color); /* DÜZELTİLDİ */
+    color: var(--text-color); /* DÜZELTİLDİ */
 }
 
 .form-check-group {

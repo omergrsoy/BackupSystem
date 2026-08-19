@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Yedekleme Sistemi</title>
 
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/tables.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/forms-buttons.css" asp-append-version="true" />
@@ -16,23 +18,41 @@
     <div class="app-wrapper">
 
         <nav class="sidebar">
+
+            <button id="theme-toggle" class="btn btn-outline-secondary" style="margin: 15px; border-radius: 20px;">
+                🌙
+            </button>
+
             <a asp-controller="Home" asp-action="Index" class="sidebar-brand">
                 ⚙️ Yedekleme Sistemi
             </a>
 
             <ul class="sidebar-menu">
+
                 <li>
                     <a asp-controller="Machines" asp-action="Index">💻 Makineler</a>
                 </li>
+
                 <li>
+
                     <a asp-controller="Backups" asp-action="Index">📦 Geçmiş Yedekler</a>
                 </li>
+
                 <li>
+
                     <a href="#">⏱️ Zamanlanmış Görevler</a>
                 </li>
+
                 <li>
                     <a href="#">⚙️ Ayarlar</a>
                 </li>
+
+                <li style="margin-top: 30px; border-top: 1px solid var(--border-color);">
+                    <a asp-controller="Auth" asp-action="Logout" style="color: #dc3545 !important;">
+                        🚪 Çıkış Yap
+                    </a>
+                </li>
+
             </ul>
         </nav>
 
@@ -43,5 +63,34 @@
     </div>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const themeToggleBtn = document.getElementById("theme-toggle");
+                const currentTheme = localStorage.getItem("theme");
+
+                // Sayfa yüklendiğinde kullanıcının eski tercihini hatırla
+                if (currentTheme === "dark") {
+                    document.documentElement.setAttribute("data-theme", "dark");
+                    themeToggleBtn.innerHTML = "☀️";
+                }
+
+                // Butona tıklandığında temayı değiştir
+                themeToggleBtn.addEventListener("click", function () {
+                    let theme = document.documentElement.getAttribute("data-theme");
+
+                    if (theme === "dark") {
+                        document.documentElement.removeAttribute("data-theme");
+                        localStorage.setItem("theme", "light");
+                        themeToggleBtn.innerHTML = "🌙";
+                    } else {
+                        document.documentElement.setAttribute("data-theme", "dark");
+                        localStorage.setItem("theme", "dark");
+                        themeToggleBtn.innerHTML = "☀️";
+                    }
+                });
+            });
+    </script>
+
 </body>
 </html>

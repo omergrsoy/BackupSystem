@@ -1,10 +1,12 @@
 ﻿using BackupSystem.Server.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace BackupSystem.Server.Controllers
 {
+    [Authorize]
     public class BackupsController : Controller
     {
         private readonly AppDbContext _context;

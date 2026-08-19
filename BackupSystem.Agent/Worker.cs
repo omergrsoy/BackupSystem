@@ -63,9 +63,11 @@ namespace BackupSystem.Agent
                     bool forceBackup = false;
                     string? backupType = "Tam";
                     DateTime? referenceDate = null;
-                    string excludedExtensions = "";
+                    string? excludedExtensions = "";
+                    string? excludedFolders = "";
 
-                    if (root.TryGetProperty("forceBackup", out var forceProp)) forceBackup = forceProp.GetBoolean();
+                    if (root.TryGetProperty("forceBackup", out var forceProp)) 
+                        forceBackup = forceProp.GetBoolean();
 
                     if (root.TryGetProperty("backupType", out var typeProp) && typeProp.ValueKind != System.Text.Json.JsonValueKind.Null)
                         backupType = typeProp.GetString();
@@ -74,15 +76,16 @@ namespace BackupSystem.Agent
                         referenceDate = dateProp.GetDateTime();
 
                     if (root.TryGetProperty("excludedExtensions", out var extProp) && extProp.ValueKind != System.Text.Json.JsonValueKind.Null)
-                    {
                         excludedExtensions = extProp.GetString();
-                    }
+
+                    if (root.TryGetProperty("excludedFolders", out var folderProp) && folderProp.ValueKind != System.Text.Json.JsonValueKind.Null)
+                        excludedFolders = folderProp.GetString();
 
                     if (forceBackup)
                     {
                         _logger.LogWarning($"⚠️ SUNUCUDAN [{backupType}] YEDEKLEME EMRİ ALINDI!");
                         // Metoda excludedExtensions'ı da parametre olarak gönderiyoruz
-                        await TakeBackupAndUploadAsync(serverUrl, machineId, backupType, referenceDate, excludedExtensions, stoppingToken);
+                        await TakeBackupAndUploadAsync(serverUrl, machineId, backupType, referenceDate, excludedExtensions, excludedFolders, stoppingToken);
                     }
                 }
                 else
@@ -96,7 +99,7 @@ namespace BackupSystem.Agent
             }
         }
 
-        private async Task TakeBackupAndUploadAsync(string serverUrl, int machineId, string backupType, DateTime? referenceDate, string excludedExtensions, CancellationToken stoppingToken)
+        private async Task TakeBackupAndUploadAsync(string serverUrl, int machineId, string backupType, DateTime? referenceDate, string excludedExtensions, string excludedFolders, CancellationToken stoppingToken)
         {
             var targetDir = _configuration["AgentSettings:TargetDirectory"];
             if (!Directory.Exists(targetDir)) return;
@@ -106,15 +109,37 @@ namespace BackupSystem.Agent
                 ? new List<string>()
                 : excludedExtensions.Split(',').Select(e => e.Trim().ToLower()).ToList();
 
+            var folderList = string.IsNullOrEmpty(excludedFolders) 
+                ? new List<string>() 
+                : excludedFolders.Split(',').Select(f => f.Trim().ToLower()).ToList();
+
             var allFiles = Directory.GetFiles(targetDir, "*.*", SearchOption.AllDirectories);
 
             // MİMARİ DOKUNUŞ: Hem Tarihe Göre Hem Uzantıya Göre Çift Filtreleme
-            var filesToBackup = allFiles.Where(f =>
+            var filesToBackup = allFiles.Where(filePath =>
             {
-                bool isDateValid = referenceDate == null || File.GetLastWriteTime(f) > referenceDate;
-                bool isExcluded = extList.Contains(Path.GetExtension(f).ToLower());
+                var fileInfo = new FileInfo(filePath);
 
-                return isDateValid && !isExcluded; // Tarihi uygunsa VE yasaklı uzantı DEĞİLSE yedeğe al
+                // KONTROL 1: Gizli veya Sistem Dosyası mı? (Thumbs.db, desktop.ini vb. atla)
+                if (fileInfo.Attributes.HasFlag(FileAttributes.Hidden) || fileInfo.Attributes.HasFlag(FileAttributes.System))
+                    return false;
+
+                // KONTROL 2: Yasaklı Klasör İçinde mi? (Örn: \node_modules\ içindeyse atla)
+                // Windows (\) ve Linux (/) yollarını desteklemesi için iki türlü bakıyoruz
+                bool isInExcludedFolder = folderList.Any(folder => filePath.ToLower().Contains($"\\{folder}\\") || filePath.ToLower().Contains($"/{folder}/"));
+                if (isInExcludedFolder)
+                    return false;
+
+                // KONTROL 3: Yasaklı Uzantı mı? (Örn: .tmp ise atla)
+                if (extList.Contains(fileInfo.Extension.ToLower()))
+                    return false;
+
+                // KONTROL 4: Artımlı/Fark Yedek Tarih Kontrolü
+                if (referenceDate != null && fileInfo.LastWriteTime <= referenceDate)
+                    return false;
+
+                // Tüm filtreleri başarıyla geçerse yedeğe dahil et!
+                return true;
             }).ToList();
 
             if (!filesToBackup.Any())

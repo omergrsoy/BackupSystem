@@ -1,6 +1,7 @@
 ﻿using BackupSystem.Server.Data;
 using BackupSystem.Server.Models;
 using BackupSystem.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ namespace BackupSystem.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AgentController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -31,7 +33,7 @@ namespace BackupSystem.Server.Controllers
             machine.LastHeartbeat = DateTime.Now;
 
             bool shouldBackup = machine.IsBackupRequested;
-            string backupType = machine.RequestedBackupType;
+            string? backupType = machine.RequestedBackupType;
             DateTime? referenceDate = null;
 
             // --- ZAMANLANMIŞ GÖREV KONTROLÜ (AUTOMATIC SCHEDULER) ---
@@ -78,7 +80,8 @@ namespace BackupSystem.Server.Controllers
                 forceBackup = shouldBackup,
                 backupType = backupType ?? "Artımlı",
                 referenceDate = referenceDate,
-                excludedExtensions = machine.ExcludedExtensions
+                excludedExtensions = machine.ExcludedExtensions,
+                excludedFolders = machine.ExcludedFolders
             });
         }
 
@@ -163,6 +166,9 @@ namespace BackupSystem.Server.Controllers
 
                 _context.Backups.Add(backupRecord);
                 await _context.SaveChangesAsync();
+
+                var ftpService = HttpContext.RequestServices.GetRequiredService<FtpUploadService>();
+                _ = Task.Run(() => ftpService.UploadFileAsync(filePath, fileName));
 
                 return Ok(new { message = "Tüm parçalar başarıyla birleştirildi ve yedek tamamlandı!" });
 

@@ -8,7 +8,7 @@
 
 .dashboard-card {
     flex: 1;
-    background-color: #fff;
+    background-color: var(--card-bg); /* DÜZELTİLDİ */
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
@@ -37,5 +37,5 @@
     font-size: 2.5rem;
     font-weight: bold;
     margin: 0;
-    color: #212529;
+    color: var(--text-color); /* DÜZELTİLDİ */
 }

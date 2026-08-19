@@ -16,6 +16,7 @@ namespace BackupSystem.Server.Models
         public string? RequestedBackupType { get; set; }
         public string? DailyBackupTime { get; set; }
         public string? ExcludedExtensions { get; set; }
+        public string? ExcludedFolders { get; set; }
         public DateTime? LastScheduledBackupDate { get; set; }
         public ICollection<BackupRecord>? Backups { get; set; }
 

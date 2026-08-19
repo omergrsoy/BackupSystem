@@ -3,9 +3,11 @@ using BackupSystem.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackupSystem.Server.Controllers
 {
+    [Authorize]
     public class MachinesController : Controller
     {
         private readonly AppDbContext _context;

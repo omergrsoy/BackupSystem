@@ -7,18 +7,18 @@
 }
 
     .machine-table th, .machine-table td {
-        border: 1px solid #dee2e6;
+        border: 1px solid var(--border-color); /* DÜZELTİLDİ */
         padding: 12px;
         text-align: left;
     }
 
     .machine-table thead {
-        background-color: #212529;
-        color: #fff;
+        background-color: var(--table-header-bg); /* DÜZELTİLDİ */
+        color: var(--text-color); /* DÜZELTİLDİ */
     }
 
     .machine-table tbody tr:hover {
-        background-color: #f8f9fa;
+        background-color: var(--table-header-bg); /* DÜZELTİLDİ */
     }
 
 /* Durum Etiketleri (Badges) */

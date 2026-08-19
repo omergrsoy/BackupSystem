@@ -56,6 +56,12 @@
                 <small style="color: #6c757d;">Bu uzantılara sahip dosyalar yedeklenmeyecektir (Virgülle ayırın).</small>
             </div>
 
+            <div class="form-group" style="margin-top: 15px;">
+                <label class="form-label">Hariç Tutulacak Klasörler</label>
+                <input asp-for="ExcludedFolders" class="form-input" placeholder="Örn: node_modules, temp, obj" />
+                <small style="color: #6c757d;">İçinde bu isimlerin geçtiği klasörler tamamen atlanacaktır (Virgülle ayırın).</small>
+            </div>
+
             <div class="form-check-group">
                 <input asp-for="IsActive" type="checkbox" class="form-check-input" />
                 <label class="form-label" style="margin-bottom: 0;">Makine Aktif Mi?</label>
