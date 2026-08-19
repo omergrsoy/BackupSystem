@@ -1,0 +1,50 @@
+﻿@model IEnumerable<BackupSystem.Server.Models.Machine>
+@{
+    ViewData["Title"] = "Zamanlanmış Görevler";
+}
+
+<div class="machine-container">
+    <div class="machine-header">
+        <h2>Zamanlanmış Görevler</h2>
+        <small style="color: #6c757d;">Her gün otomatik olarak çalışacak yedekleme planları.</small>
+    </div>
+
+    <table class="machine-table">
+        <thead>
+            <tr>
+                <th>Makine Adı</th>
+                <th>IP Adresi</th>
+                <th>Hedef Dizin</th>
+                <th>Çalışma Saati</th>
+                <th>Durum</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr><td colspan="5" style="text-align:center;">Henüz zamanlanmış bir görev yok.</td></tr>
+            }
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.IpAddress</td>
+                    <td>@item.TargetDirectory</td>
+                    <td style="font-weight: bold; color: #0d6efd;">@item.DailyBackupTime</td>
+                    <td>
+                        @if (item.IsActive)
+                        {
+                            <span class="badge-custom badge-active">Bekleniyor</span>
+                        }
+                        else
+                        {
+
+                            <span class="badge-custom badge-passive">Makine Pasif</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

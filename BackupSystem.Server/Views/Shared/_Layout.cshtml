@@ -43,22 +43,19 @@
                 </li>
 
                 <li>
-                    <a href="#">⏱️ Zamanlanmış Görevler</a>
+                    <a asp-controller="Tasks" asp-action="Index">⏱️ Zamanlanmış Görevler</a>
                 </li>
 
                 <li>
                     <a asp-controller="Users" asp-action="Index">👥 Kullanıcı Yönetimi</a>
                 </li>
 
-                @if (User.IsInRole("Admin"))
-                {
                 <li>
                     <a asp-controller="Logs" asp-action="Index">📋 Log Kayıtları</a>
                 </li>
-                }
 
                 <li>
-                    <a href="#">⚙️ Ayarlar</a>
+                    <a asp-controller="Settings" asp-action="Index">⚙️ Ayarlar</a>
                 </li>
 
                 <li style="margin-top: 30px; border-top: 1px solid var(--border-color);">

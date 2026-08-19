@@ -1,0 +1,46 @@
+﻿@model IEnumerable<BackupSystem.Server.Models.BackupRecord>
+@{
+    ViewData["Title"] = "Geri Yükle";
+}
+
+<div class="machine-container">
+    <div class="machine-header">
+        <h2>Felaket Kurtarma Merkezi</h2>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" style="color:#0f5132; margin-bottom:15px; padding: 10px; border-radius: 5px; background: #d1e7dd;">@TempData["Message"]</div>
+    }
+
+    <table class="machine-table">
+        <thead>
+            <tr>
+                <th>Yedek Tarihi</th>
+                <th>Makine</th>
+                <th>Dosya Boyutu</th>
+                <th>Türü</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.BackupDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@(item.Machine != null ? item.Machine.Name : "Silinmiş Makine")</td>
+                    <td>@item.FileSize MB</td>
+                    <td><span class="badge-custom badge-warning" style="color:#000;">@item.BackupType</span></td>
+                    <td>
+                        <form asp-action="StartRestore" method="post">
+                            <input type="hidden" name="backupId" value="@item.Id" />
+                            <button type="submit" class="btn-custom btn-sm-custom btn-primary-custom" onclick="return confirm('Bu yedeği makineye geri yüklemek istediğinize emin misiniz? Mevcut dosyalarınızın üzerine yazılabilir.');">
+                                Makineye Geri Yükle
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

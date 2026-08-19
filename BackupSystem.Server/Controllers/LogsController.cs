@@ -17,7 +17,7 @@ namespace BackupSystem.Server.Controllers
             _context = context;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Index()
         {
             // En yeniden en eskiye

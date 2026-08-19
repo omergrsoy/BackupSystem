@@ -68,11 +68,18 @@ using (var scope = app.Services.CreateScope())
     // Admin Hesabı
     if (await userManager.FindByEmailAsync("omergrsoy52@gmail.com") == null)
     {
-        var adminUser = new IdentityUser { UserName = "OMER", Email = "omergrsoy52@gmail.com" };
+        var adminUser = new IdentityUser { UserName = "omergrsoy52@gmail.com", Email = "omergrsoy52@gmail.com" };
         var result = await userManager.CreateAsync(adminUser, "Admin123!"); // Şifre: Admin123!
         if (result.Succeeded)
             await userManager.AddToRoleAsync(adminUser, "Admin");
     }
+
+    var lockedAdmin = await userManager.FindByEmailAsync("omergrsoy52@gmail.com");
+    if (lockedAdmin != null)
+    {
+        await userManager.SetTwoFactorEnabledAsync(lockedAdmin, false);
+    }
+
 }
 
 app.Run();

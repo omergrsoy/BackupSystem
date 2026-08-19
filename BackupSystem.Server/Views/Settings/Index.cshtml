@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Ayarlar";
+}
+
+<div class="machine-container">
+    <div class="machine-header">
+        <h2>Sistem Ayarları</h2>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="dashboard-card card-purple">
+            <h3 class="dashboard-card-title">🛡️ Güvenlik</h3>
+            <p style="color: var(--text-color); margin: 15px 0;">Yönetici hesabınızın güvenliğini artırmak için bir Authenticator Uygulaması kurun.</p>
+            <a asp-controller="Auth" asp-action="Setup2FA" class="btn-custom btn-primary-custom">2FA Kurulumunu Başlat</a>
+        </div>
+
+        <div class="dashboard-card card-blue">
+            <h3 class="dashboard-card-title">☁️ FTP Sunucu Ayarları</h3>
+            <p style="color: var(--text-color); margin: 15px 0;">Yedeklerin aktarılacağı uzak sunucu (appsettings.json içinden yönetilir).</p>
+            <button class="btn-custom btn-secondary-custom" disabled>Aktif Edildi</button>
+        </div>
+    </div>
+</div>
