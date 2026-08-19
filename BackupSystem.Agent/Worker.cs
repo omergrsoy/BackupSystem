@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using BackupSystem.Agent.Helpers;
 
 namespace BackupSystem.Agent
 {
@@ -65,6 +66,8 @@ namespace BackupSystem.Agent
                     DateTime? referenceDate = null;
                     string? excludedExtensions = "";
                     string? excludedFolders = "";
+                    int chunkSizeBytes = 10 * 1024 * 1024; // Default: 10 MB
+                    long maxUploadSpeedBps = 5 * 1024 * 1024; // Default: 5 MB
 
                     if (root.TryGetProperty("forceBackup", out var forceProp)) 
                         forceBackup = forceProp.GetBoolean();
@@ -81,11 +84,17 @@ namespace BackupSystem.Agent
                     if (root.TryGetProperty("excludedFolders", out var folderProp) && folderProp.ValueKind != System.Text.Json.JsonValueKind.Null)
                         excludedFolders = folderProp.GetString();
 
+                    if (root.TryGetProperty("chunkSizeBytes", out var chunkProp))
+                        chunkSizeBytes = chunkProp.GetInt32();
+
+                    if (root.TryGetProperty("maxUploadSpeedBps", out var speedProp))
+                        maxUploadSpeedBps = speedProp.GetInt64();
+
                     if (forceBackup)
                     {
                         _logger.LogWarning($"⚠️ SUNUCUDAN [{backupType}] YEDEKLEME EMRİ ALINDI!");
                         // Metoda excludedExtensions'ı da parametre olarak gönderiyoruz
-                        await TakeBackupAndUploadAsync(serverUrl, machineId, backupType, referenceDate, excludedExtensions, excludedFolders, stoppingToken);
+                        await TakeBackupAndUploadAsync(serverUrl, machineId, backupType, referenceDate, excludedExtensions, excludedFolders, chunkSizeBytes, maxUploadSpeedBps, stoppingToken);
                     }
                 }
                 else
@@ -99,7 +108,7 @@ namespace BackupSystem.Agent
             }
         }
 
-        private async Task TakeBackupAndUploadAsync(string serverUrl, int machineId, string backupType, DateTime? referenceDate, string excludedExtensions, string excludedFolders, CancellationToken stoppingToken)
+        private async Task TakeBackupAndUploadAsync(string serverUrl, int machineId, string backupType, DateTime? referenceDate, string excludedExtensions, string excludedFolders, int chunkSizeBytes, long maxUploadSpeedBps, CancellationToken stoppingToken)
         {
             var targetDir = _configuration["AgentSettings:TargetDirectory"];
             if (!Directory.Exists(targetDir)) return;
@@ -147,11 +156,9 @@ namespace BackupSystem.Agent
                 _logger.LogInformation($"ℹ️ [{backupType}] Yedeklemesi: Dosya bulunamadı veya tüm dosyalar filtrelendi.");
                 return;
             }
-            // ... (Geri kalan Zipleme, Şifreleme ve UploadChunk kodları tamamen aynı kalacak)
 
-            // ... Eski kodlar (Zip oluşturma kısmı)
             var tempZipPath = Path.Combine(Path.GetTempPath(), $"backup_{machineId}_{DateTime.Now:yyyyMMddHHmmss}.zip");
-            var tempEncPath = tempZipPath + ".enc"; // Şifrelenmiş dosya için yeni uzantı
+            var tempEncPath = tempZipPath + ".enc"; // Şifreli Dosya
 
             try
             {
@@ -175,19 +182,21 @@ namespace BackupSystem.Agent
 
                 var fileInfo = new FileInfo(tempEncPath);
                 long fileSize = fileInfo.Length;
-                int chunkSize = 10 * 1024 * 1024; // 10 MB (Her bir parçanın boyutu)
+                int chunkSize = chunkSizeBytes; // 10 MB (Her bir parçanın boyutu)
+                long maxUploadSpeed = maxUploadSpeedBps; // Her bir parça 5 MB / sn yüklenecek!
                 int totalChunks = (int)Math.Ceiling((double)fileSize / chunkSize);
 
                 // Sunucuda dosyaların birbirine karışmaması için sabit bir dosya adı oluşturuyoruz
-                string uniqueFileName = $"backup_{machineId}_{backupType}_{DateTime.Now:yyyyMMddHHmm}.enc";
+                string uniqueFileName = $"backup_{machineId}_{backupType}_{DateTime.Now:yyyyMMdd_HHmm}.enc";
 
                 using (var fileStream = new FileStream(tempEncPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var throttledStream = new ThrottledStream(fileStream, maxUploadSpeedBps))
                 {
                     for (int i = 0; i < totalChunks; i++)
                     {
                         // 10 MB'lık geçici bir bellek (buffer) oluştur
                         byte[] buffer = new byte[chunkSize];
-                        int bytesRead = await fileStream.ReadAsync(buffer, 0, chunkSize, stoppingToken);
+                        int bytesRead = await throttledStream.ReadAsync(buffer, 0, chunkSize, stoppingToken);
 
                         if (bytesRead == 0) break; // Okunacak veri kalmadıysa çık
 

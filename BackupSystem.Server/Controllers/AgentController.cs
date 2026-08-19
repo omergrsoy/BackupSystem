@@ -73,6 +73,10 @@ namespace BackupSystem.Server.Controllers
                 machine.RequestedBackupType = null;
             }
 
+            var settings = _context.SystemSettings.FirstOrDefault();
+            int currentChunkMB = settings != null ? settings.ChunkSizeMB : 10;
+            int currentSpeedMB = settings != null ? settings.MaxUploadSpeedMB : 5;
+
             _context.SaveChanges();
             return Ok(new
             {
@@ -81,7 +85,9 @@ namespace BackupSystem.Server.Controllers
                 backupType = backupType ?? "Artımlı",
                 referenceDate = referenceDate,
                 excludedExtensions = machine.ExcludedExtensions,
-                excludedFolders = machine.ExcludedFolders
+                excludedFolders = machine.ExcludedFolders,
+                chunkSizeBytes = currentChunkMB * 1024 * 1024,
+                maxUploadSpeedBps = currentSpeedMB * 1024 * 1024
             });
         }
 

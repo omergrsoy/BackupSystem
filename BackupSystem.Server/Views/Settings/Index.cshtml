@@ -1,4 +1,5 @@
-﻿@{
+﻿@model BackupSystem.Server.Models.SystemSetting
+@{
     ViewData["Title"] = "Ayarlar";
 }
 
@@ -7,17 +8,54 @@
         <h2>Sistem Ayarları</h2>
     </div>
 
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" style="color:#0f5132; margin-bottom:15px; padding: 10px; border-radius: 5px; background: #d1e7dd;">@TempData["Message"]</div>
+    }
+
     <div class="dashboard-container">
-        <div class="dashboard-card card-purple">
-            <h3 class="dashboard-card-title">🛡️ Güvenlik</h3>
-            <p style="color: var(--text-color); margin: 15px 0;">Yönetici hesabınızın güvenliğini artırmak için bir Authenticator Uygulaması kurun.</p>
-            <a asp-controller="Auth" asp-action="Setup2FA" class="btn-custom btn-primary-custom">2FA Kurulumunu Başlat</a>
+
+        <div class="dashboard-card card-green" style="flex: 2;">
+            <h3 class="dashboard-card-title">Agent Performans Ayarları</h3>
+            <p style="color: var(--text-color); margin: 15px 0 25px 0;">Bu ayarlar, sisteme bağlı tüm ajanların ağ trafiğini ve dosya parçalama mantığını merkezi olarak yönetir.</p>
+
+            <form asp-action="SaveAgentSettings" method="post">
+                <div class="form-group">
+                    <label class="form-label">Parça Boyutu - MB</label>
+                    <input type="number" name="chunkSizeMB" value="@Model.ChunkSizeMB" class="form-input" min="1" max="100" required />
+                    <small style="color: #6c757d;">Dosyalar sunucuya kaç MB'lık paketler halinde bölünüp gönderilsin?</small>
+                </div>
+
+                <div class="form-group" style="margin-top: 15px;">
+                    <label class="form-label">Bant Genişliği Sınırlandırma (Bandwidth)</label>
+                    <select name="maxUploadSpeedMB" class="form-input" required>
+                        <option value="0" selected="@(Model.MaxUploadSpeedMB == 0 ? "selected" : null)">Sınırsız</option>
+                        <option value="1" selected="@(Model.MaxUploadSpeedMB == 1 ? "selected" : null)">1 MB/s</option>
+                        <option value="5" selected="@(Model.MaxUploadSpeedMB == 5 ? "selected" : null)">5 MB/s</option>
+                        <option value="10" selected="@(Model.MaxUploadSpeedMB == 10 ? "selected" : null)">10 MB/s</option>
+                        <option value="50" selected="@(Model.MaxUploadSpeedMB == 50 ? "selected" : null)">50 MB/s</option>
+                        <option value="50" selected="@(Model.MaxUploadSpeedMB == 100 ? "selected" : null)">100 MB/s</option>
+                    </select>
+                    <small style="color: #6c757d;">Ajanların ağı sömürmemesi için saniyede maksimum gönderim hızını seçin.</small>
+                </div>
+
+                <button type="submit" class="btn-custom btn-success-custom" style="margin-top: 20px;">Ayararı Tüm Ajanlara Uygula</button>
+            </form>
         </div>
 
-        <div class="dashboard-card card-blue">
-            <h3 class="dashboard-card-title">☁️ FTP Sunucu Ayarları</h3>
-            <p style="color: var(--text-color); margin: 15px 0;">Yedeklerin aktarılacağı uzak sunucu (appsettings.json içinden yönetilir).</p>
-            <button class="btn-custom btn-secondary-custom" disabled>Aktif Edildi</button>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+            <div class="dashboard-card card-purple">
+                <h3 class="dashboard-card-title">🛡️ Güvenlik</h3>
+                <p style="color: var(--text-color); margin: 15px 0;">Yönetici hesabınız için Authenticator</p>
+                <a asp-controller="Auth" asp-action="Setup2FA" class="btn-custom btn-primary-custom" style="width: 100%;">2FA Kurulumu</a>
+            </div>
+
+            <div class="dashboard-card card-blue">
+                <h3 class="dashboard-card-title">☁️ FTP Sunucusu</h3>
+                <p style="color: var(--text-color); margin: 15px 0;">Uzak sunucu ayarları appsettings üzerinden okunmaktadır.</p>
+                <button class="btn-custom btn-secondary-custom" style="width: 100%;" disabled>Aktif Edildi</button>
+            </div>
         </div>
+
     </div>
 </div>
