@@ -1,0 +1,40 @@
+﻿@model BackupSystem.Server.ViewModels.Setup2FAViewModel
+@{
+    ViewData["Title"] = "2FA Kurulumu";
+}
+
+<div class="machine-container">
+    <h2>📱 Google Authenticator Kurulumu</h2>
+    <hr />
+    <div class="machine-form-wrapper" style="text-align: center;">
+        <p style="color: var(--text-color);">
+            Lütfen telefonunuzdaki Google Authenticator uygulamasını açın ve aşağıdaki QR kodu okutun.
+        </p>
+
+        <img 
+            src="data:image/png;base64, @Model.QrCodeImageBase64" 
+            style="border: 10px solid white; border-radius: 8px; margin: 20px 0;" 
+        />
+
+        <p style="color: #6c757d; font-size: 0.9rem;">Eğer kamera çalışmıyorsa şu kodu manuel girebilirsiniz:<br /> <b>@Model.AuthenticatorKey</b></p>
+
+        <form 
+            asp-action="Setup2FA" method="post" style="margin-top: 20px;"
+         >
+
+            <div 
+                asp-validation-summary="All" style="color: #dc3545; font-weight: bold;">
+            </div>
+
+            <div class="form-group" style="text-align: left;">
+                <label class="form-label">Uygulamadaki 6 Haneli Kodu Girin:</label>
+                <input asp-for="Code" class="form-input" placeholder="Örn: 123456" autocomplete="off" required />
+            </div>
+
+            <button 
+                type="submit" class="btn-custom btn-success-custom" style="width: 100%;">Doğrula ve Etkinleştir
+            </button>
+
+        </form>
+    </div>
+</div>
